@@ -55,3 +55,46 @@ Application: PHP, AWS SDK
 ![Auto Scaling Group targets healthy](asg-healthypng.png)
 
 ![S3 bucket showing original and Lambda-generated thumbnail](s3-lambda-thumbnail.png)
+
+## Challenges & Debugging
+
+### Case 1: IAM credentials failed with a 404 error
+**Symptom:** The photo upload feature failed with 
+`Error retrieving credentials from the instance profile metadata 
+service... 404 Not Found`.
+**Diagnosis:** The EC2 instance had no IAM role attached, so the 
+AWS SDK had no credentials to call S3. Verifying with 
+`curl http://169.254.169.254/latest/meta-data/iam/security-credentials/` 
+confirmed the endpoint returned nothing.
+**Fix:** Attached an IAM instance profile to the instance. 
+Importantly, this surfaced a subtler issue: an instance profile is 
+**not** captured when a custom AMI is created from an instance — it 
+must be explicitly attached to the Launch Template used by the Auto 
+Scaling Group, otherwise every instance launched from the AMI 
+inherits the same missing-credentials problem.
+
+### Case 2: Lambda function timed out during image processing
+**Symptom:** Thumbnail generation failed with 
+`Sandbox.Timedout: Task timed out after 3.00 seconds`.
+**Diagnosis:** The function's default configuration (3-second 
+timeout, 128 MB memory) was insufficient to download the source 
+image from S3, resize it, and upload the result back — especially 
+accounting for cold-start latency.
+**Fix:** Increased the timeout to 30 seconds and memory to 256 MB 
+(Lambda also allocates proportionally more CPU with more memory, 
+reducing execution time). Verified success via the CloudWatch 
+`REPORT` log line showing actual duration well under the new limit.
+
+### Case 3: S3 objects returned Access Denied despite a correct policy
+**Symptom:** Photos uploaded successfully and metadata was correct, 
+but images failed to render on the photo album page — while direct 
+access to the object URL correctly returned Access Denied.
+**Diagnosis:** The bucket policy granted `s3:GetObject` conditionally 
+on the HTTP `Referer` header matching the application's domain. The 
+policy had been written against an earlier domain (the Dev Server's 
+IP) before the Application Load Balancer was provisioned, so the 
+Referer sent by the browser no longer matched the policy condition.
+**Fix:** Updated the policy's `aws:Referer` condition to the ALB's 
+DNS name and confirmed correct behavior in both directions: direct 
+object URLs are denied, while the same objects load correctly when 
+referenced from the application.
