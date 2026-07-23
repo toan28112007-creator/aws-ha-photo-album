@@ -52,6 +52,6 @@ Application: PHP, AWS SDK
 [3-5 most representative images — not the full 35-image assignment set]
 ![Album page displaying photos and metadata](album-page.png)
 
-![Auto Scaling Group targets healthy](asg-healthy.png)
+![Auto Scaling Group targets healthy](asg-healthypng.png)
 
 ![S3 bucket showing original and Lambda-generated thumbnail](s3-lambda-thumbnail.png)
