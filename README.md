@@ -11,7 +11,7 @@ with serverless image processing, deployed on AWS.
 
 ## Demo Video
 
-[![Watch the demo](https://youtu.be/6WLgEXLugAk/maxresdefault.jpg)](https://youtu.be/6WLgEXLugAk)
+[![Watch the demo](https://youtu.be/6WLgEXLugAk/hqdefault.jpg)](https://youtu.be/6WLgEXLugAk)
 
 A walkthrough of the live application: accessing it through the Load 
 Balancer, uploading a photo and watching the Lambda thumbnail pipeline 
