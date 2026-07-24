@@ -9,6 +9,15 @@ with serverless image processing, deployed on AWS.
 - Outcome: Multi-AZ architecture with auto-scaling, layered 
   security, and serverless image thumbnail generation.
 
+## Demo Video
+
+[![Watch the demo](https://youtu.be/6WLgEXLugAk/maxresdefault.jpg)](https://youtu.be/6WLgEXLugAk)
+
+A walkthrough of the live application: accessing it through the Load 
+Balancer, uploading a photo and watching the Lambda thumbnail pipeline 
+run end-to-end, and testing Auto Scaling Group self-healing by 
+terminating an instance mid-demo.
+
 ## Architecture
 ![Architecture Diagram](architecture-diagram.png)
 - Traffic flow: User → ALB → Auto Scaling Group (private subnets) 
