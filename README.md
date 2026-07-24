@@ -11,7 +11,7 @@ with serverless image processing, deployed on AWS.
 
 ## Demo Video
 
-**[Watch the demo on YouTube →](https://youtu.be/6WLgEXLugAk)**
+[![Watch on YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo-red?style=for-the-badge&logo=youtube)](https://youtu.be/6WLgEXLugAk)
 
 A walkthrough of the live application: accessing it through the Load 
 Balancer, uploading a photo and watching the Lambda thumbnail pipeline 
